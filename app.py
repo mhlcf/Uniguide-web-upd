@@ -6,9 +6,12 @@ from datetime import datetime
 from flask import Flask, request, jsonify, send_file
 from groq import Groq
 
+# Đường dẫn gốc tuyệt đối của thư mục chứa app.py
+# Đây là chìa khóa để gunicorn trên Render tìm đúng file dù chạy từ thư mục nào
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Khởi tạo Flask Application
-# static_folder='' và static_url_path='' giúp Flask có thể phục vụ trực tiếp index.html và các tài liệu liên quan ở cùng thư mục
-app = Flask(__name__, static_folder='', static_url_path='')
+app = Flask(__name__, static_folder=BASE_DIR, static_url_path='')
 
 # --- 1. CẤU HÌNH API GROQ CHUYÊN NGHIỆP ---
 # Lấy API Key từ Biến môi trường (Environment Variable) - Phương pháp bảo mật chuẩn cho Render/Đám mây
@@ -35,7 +38,8 @@ if GROQ_API_KEY:
 
 
 # --- 2. KHỞI TẠO CƠ SỞ DỮ LIỆU SQLITE ---
-DATABASE_FILE = 'uniguide_history.db'
+# Dùng đường dẫn tuyệt đối để Render luôn tìm đúng vị trí file database
+DATABASE_FILE = os.path.join(BASE_DIR, 'uniguide_history.db')
 
 def init_db():
     conn = sqlite3.connect(DATABASE_FILE)
@@ -76,8 +80,9 @@ init_db()
 # Trả về trang chủ giao diện Frontend index.html
 @app.route('/')
 def home():
-    if os.path.exists('index.html'):
-        return send_file('index.html')
+    index_path = os.path.join(BASE_DIR, 'index.html')
+    if os.path.exists(index_path):
+        return send_file(index_path)
     else:
         return "<h3>Lỗi: Không tìm thấy tệp tin index.html tại thư mục gốc!</h3>", 404
 
@@ -94,7 +99,7 @@ def api_get_advice():
 
     name = data.get("name", "").strip()
     score = float(data.get("score", 20.0))
-    block = data.get("block", "").strip().toUpperCase() if hasattr(data.get("block", ""), "toUpperCase") else data.get("block", "").strip()
+    block = data.get("block", "").strip().upper()
     region = data.get("region", "Miền Bắc")
     holland = data.get("holland", "I")
     passions = data.get("passions", "").strip()
@@ -174,7 +179,7 @@ def api_get_advice():
 
     # Trả kết quả tư vấn về cho Frontend
     return jsonify({
-        "success": true,
+        "success": True,
         "advice": ai_advice
     })
 
