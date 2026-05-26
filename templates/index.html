@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tư vấn Tuyển sinh AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="text-center text-primary mb-4">Hệ Thống Tư Vấn Tuyển Sinh AI</h1>
+        
+        <div class="card shadow p-4 mb-5">
+            <form method="POST">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Điểm thi của bạn</label>
+                        <input type="number" step="0.1" name="diem_thi" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Khối thi (A00, D01...)</label>
+                        <input type="text" name="to_hop" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Khu vực</label>
+                        <select name="vung_mien" class="form-select">
+                            <option value="Toàn quốc">Toàn quốc</option>
+                            <option value="Miền Bắc">Miền Bắc</option>
+                            <option value="Miền Trung">Miền Trung</option>
+                            <option value="Miền Nam">Miền Nam</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mt-4">AI Tìm Trường Cho Tôi</button>
+            </form>
+        </div>
+
+        {% if ket_qua %}
+        <div class="row">
+            {% for item in ket_qua %}
+            <div class="col-md-6 mb-3">
+                <div class="card h-100 border-start border-primary border-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.truong }}</h5>
+                        <p class="card-text text-muted">{{ item.nganh }} - Điểm: {{ item.diem_chuan }}</p>
+                        <p class="text-success small"><em>"{{ item.loi_khuyen }}"</em></p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="text-center mt-4">
+            <a href="/trac-nghiem" class="btn btn-outline-secondary">Bạn chưa biết chọn ngành gì? Trắc nghiệm ngay!</a>
+        </div>
+    </div>
+</body>
+</html>

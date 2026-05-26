@@ -1,0 +1,3242 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniGuide - Định Hướng Nghề Nghiệp & Chọn Trường Đại Học Cùng AI</title>
+    
+    <!-- Google Fonts: Poppins (Tiêu đề) và Inter (Nội dung) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons & Marked.js for Markdown AI responses -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <style>
+        /* --- HỆ THỐNG CSS VARIABLES (BIẾN MÀU SẮC & THÔNG SỐ) --- */
+        :root[data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: rgba(37, 99, 235, 0.1);
+            --accent: #4f46e5;
+            --border-color: #e2e8f0;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(226, 232, 240, 0.8);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --glow-color: rgba(37, 99, 235, 0.2);
+            
+            /* Tiers colors */
+            --tier-challenge: #ef4444;
+            --tier-challenge-light: rgba(239, 68, 68, 0.1);
+            --tier-matching: #f59e0b;
+            --tier-matching-light: rgba(245, 158, 11, 0.1);
+            --tier-safe: #10b981;
+            --tier-safe-light: rgba(16, 185, 129, 0.1);
+        }
+
+        :root[data-theme="dark"] {
+            --bg-primary: #090d16;
+            --bg-secondary: #111827;
+            --bg-tertiary: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-tertiary: #6b7280;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --primary-light: rgba(59, 130, 246, 0.15);
+            --accent: #6366f1;
+            --border-color: #1f2937;
+            --glass-bg: rgba(17, 24, 39, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --glow-color: rgba(59, 130, 246, 0.4);
+            
+            /* Tiers colors */
+            --tier-challenge: #f87171;
+            --tier-challenge-light: rgba(248, 113, 113, 0.15);
+            --tier-matching: #fbbf24;
+            --tier-matching-light: rgba(251, 191, 36, 0.15);
+            --tier-safe: #34d399;
+            --tier-safe-light: rgba(52, 211, 153, 0.15);
+        }
+
+        /* --- CẤU HÌNH RESET & PHÔNG CHỮ --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* --- BACKGROUND DYNAMIC GLOW (HIỆU ỨNG PHÔNG NỀN DỘNG) --- */
+        .bg-glow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .glow-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.15;
+            animation: float-glow 25s infinite alternate ease-in-out;
+        }
+
+        .glow-1 {
+            top: -10%;
+            right: 10%;
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+        }
+
+        .glow-2 {
+            top: 40%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: var(--accent);
+            animation-delay: -5s;
+        }
+
+        .glow-3 {
+            bottom: -10%;
+            right: -10%;
+            width: 450px;
+            height: 450px;
+            background: var(--primary);
+            animation-delay: -10s;
+        }
+
+        @keyframes float-glow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, 80px) scale(1.1); }
+            100% { transform: translate(-30px, -50px) scale(0.9); }
+        }
+
+        /* --- GLASSMORPHISM STYLES --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--card-shadow);
+            border-radius: 16px;
+        }
+
+        /* --- NAVIGATION BAR (THANH ĐIỀU HƯỚNG) --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 75px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo i {
+            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            list-style: none;
+        }
+
+        .nav-item button {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 99px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+        }
+
+        .nav-item button:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .nav-item.active button {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            box-shadow: 0 4px 15px var(--glow-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 0.25s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            transform: rotate(15deg);
+        }
+
+        /* --- MOBILE NAV BUTTON --- */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding: 160px 8% 80px 8%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .hero-content {
+            flex: 1.2;
+            max-width: 650px;
+        }
+
+        .badge-ai {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-light);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 25px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--text-primary) 30%, var(--primary) 70%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 550px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #ffffff !important;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px var(--glow-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px var(--glow-color);
+            filter: brightness(1.1);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--text-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .hero-visual {
+            flex: 0.8;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .floating-ui-card {
+            width: 320px;
+            padding: 24px;
+            border-radius: 20px;
+            position: relative;
+            animation: float-card 6s infinite alternate ease-in-out;
+        }
+
+        .floating-ui-card-small {
+            position: absolute;
+            padding: 14px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            animation: float-card-reverse 5s infinite alternate ease-in-out;
+        }
+
+        .ui-card-1 {
+            top: -40px;
+            left: -20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--tier-safe);
+            color: var(--tier-safe);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.15);
+        }
+
+        .ui-card-2 {
+            bottom: -20px;
+            right: -30px;
+            background: var(--glass-bg);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.2);
+        }
+
+        @keyframes float-card {
+            0% { transform: translateY(0) rotate(2deg); }
+            100% { transform: translateY(-20px) rotate(-1deg); }
+        }
+
+        @keyframes float-card-reverse {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(15px) scale(1.05); }
+        }
+
+        /* --- QUICK MOCK STATS --- */
+        .mock-stat-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .mock-stat-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .mock-stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 99px;
+            width: 75%;
+        }
+
+        /* --- FEATURE SECTION --- */
+        .features {
+            padding: 80px 8%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px auto;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            padding: 40px 30px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-secondary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: var(--card-shadow);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* --- MAIN TABS WRAPPER --- */
+        .main-content-section {
+            padding: 60px 8% 120px 8%;
+            min-height: 800px;
+            position: relative;
+        }
+
+        /* TAB CARD ELEMENT */
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- TAB 1 & 2 CONTENT WRAPPER --- */
+        .step-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .panel-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .panel-header h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .panel-header p {
+            color: var(--text-secondary);
+        }
+
+        /* --- HOLLAND WIZARD STYLES (TRẮC NGHIỆM HOLLAND TỪNG BƯỚC) --- */
+        .wizard-card {
+            padding: 40px;
+            border-radius: 24px;
+            margin-bottom: 30px;
+        }
+
+        .wizard-progress {
+            margin-bottom: 40px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-bg {
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 99px;
+            width: 16.66%;
+            transition: width 0.4s ease;
+        }
+
+        .step-slide {
+            display: none;
+        }
+
+        .step-slide.active {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .group-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 700;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .group-intro {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        .quiz-question-item {
+            margin-bottom: 35px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .rating-label {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            font-weight: 600;
+        }
+
+        .rating-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rating-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .rating-btn.selected {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #ffffff !important;
+            border-color: transparent;
+            box-shadow: 0 4px 15px var(--glow-color);
+            transform: scale(1.15);
+        }
+
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 30px;
+        }
+
+        /* --- STUDENT INFO INPUT SECTION --- */
+        .info-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .form-control-input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+        }
+
+        .form-control-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
+            background: var(--bg-secondary);
+        }
+
+        textarea.form-control-input {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* --- AI LOADING SCREEN OVERLAY (GIAO DIỆN CHỜ TÍNH TOÁN) --- */
+        .ai-loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(9, 13, 22, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+
+        .ai-loading-spinner {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 30px;
+        }
+
+        .spinner-outer {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid var(--primary-light);
+            border-top-color: var(--primary);
+            animation: spin 1.2s infinite linear;
+        }
+
+        .spinner-inner {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-light);
+            border-bottom-color: var(--accent);
+            animation: spin-reverse 1s infinite linear;
+        }
+
+        .spinner-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--primary);
+            font-size: 1.8rem;
+            animation: pulse-icon 1.5s infinite alternate ease-in-out;
+        }
+
+        .loading-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .loading-subtext {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            text-align: center;
+            max-width: 400px;
+            animation: fade-pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes spin-reverse {
+            to { transform: rotate(-360deg); }
+        }
+
+        @keyframes pulse-icon {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+            100% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+        }
+
+        @keyframes fade-pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* --- RECOMMENDATIONS VIEW (MÀN HÌNH KẾT QUẢ TỪ AI) --- */
+        .results-section {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .results-header-summary {
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .summary-badge-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px var(--glow-color);
+        }
+
+        .summary-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .summary-info p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .tiers-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .tier-section {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .tier-banner {
+            padding: 18px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .tier-banner.challenge { background: linear-gradient(90deg, var(--tier-challenge), #b91c1c); }
+        .tier-banner.matching { background: linear-gradient(90deg, var(--tier-matching), #d97706); }
+        .tier-banner.safe { background: linear-gradient(90deg, var(--tier-safe), #047857); }
+
+        .tier-cards-list {
+            padding: 25px;
+            background: var(--bg-secondary);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .university-card {
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .university-card:hover {
+            box-shadow: var(--card-shadow);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .card-header-trigger {
+            width: 100%;
+            padding: 22px 25px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            font-family: inherit;
+        }
+
+        .univ-main-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .univ-logo-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border: 1px solid var(--border-color);
+        }
+
+        .univ-meta h4 {
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .univ-meta p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .univ-meta p span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .univ-score-badge {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .chevron-icon {
+            color: var(--text-secondary);
+            transition: transform 0.3s ease;
+        }
+
+        .university-card.open .chevron-icon {
+            transform: rotate(180deg);
+        }
+
+        .card-expand-content {
+            display: none;
+            padding: 0 25px 25px 25px;
+            border-top: 1px dashed var(--border-color);
+            background: var(--bg-secondary);
+            animation: slideDown 0.3s ease;
+        }
+
+        .university-card.open .card-expand-content {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; height: 0; }
+            to { opacity: 1; height: auto; }
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            padding-top: 20px;
+        }
+
+        .analysis-block {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .analysis-block h5 {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .analysis-block h5 i {
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .analysis-block p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .stat-badge-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+        }
+
+        .mini-stat-badge {
+            flex: 1;
+            padding: 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .mini-stat-badge .label {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .mini-stat-badge .val {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .btn-restart-container {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        /* --- TEACHER DASHBOARD (CỔNG GIÁO VIÊN NÂNG CAO) --- */
+        .teacher-lock-screen {
+            max-width: 450px;
+            margin: 80px auto;
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px;
+        }
+
+        .lock-icon-container {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px auto;
+            font-size: 1.8rem;
+        }
+
+        .lock-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .lock-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .password-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* --- MAIN TEACHER PORTAL --- */
+        .teacher-portal-content {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        /* KPI Cards */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            padding: 24px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .kpi-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .kpi-card:nth-child(2) .kpi-icon { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .kpi-card:nth-child(3) .kpi-icon { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .kpi-card:nth-child(4) .kpi-icon { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+
+        .kpi-data .kpi-val {
+            font-size: 1.6rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .kpi-data .kpi-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Charts & Analytics Area */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .chart-card {
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .chart-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        /* Custom CSS-Based Bar Chart */
+        .bar-chart-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 200px;
+            padding-top: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .bar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            gap: 10px;
+        }
+
+        .bar-fill-wrapper {
+            height: 150px;
+            width: 32px;
+            background: var(--bg-tertiary);
+            border-radius: 6px 6px 0 0;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .bar-fill {
+            width: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            border-radius: 6px 6px 0 0;
+            height: 0%; /* Dynamic */
+            transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .bar-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Popular Industries List */
+        .popular-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .pop-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .pop-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .pop-name {
+            color: var(--text-primary);
+        }
+
+        .pop-count {
+            color: var(--primary);
+        }
+
+        .pop-bar-bg {
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .pop-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 99px;
+            width: 0%; /* Dynamic */
+            transition: width 1s ease;
+        }
+
+        /* Student Data Table Panel */
+        .table-card {
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 350px;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 0.95rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 40px;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.25s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .select-filter {
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Core Table Styles */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            padding: 14px 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(59, 130, 246, 0.03);
+            color: var(--text-primary);
+        }
+
+        .badge-holland {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .badge-holland.R { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .badge-holland.I { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .badge-holland.A { background: rgba(236, 72, 153, 0.1); color: #ec4899; }
+        .badge-holland.S { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .badge-holland.E { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .badge-holland.C { background: rgba(107, 114, 128, 0.1); color: #6b7280; }
+
+        /* --- FOOTER --- */
+        .footer {
+            padding: 60px 8%;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+            background: var(--bg-secondary);
+        }
+
+        .footer-logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 25px;
+            list-style: none;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES (CHUẨN ĐỘ PHẢN HỒI MOBILE/TABLET) --- */
+        @media (max-width: 1024px) {
+            .hero {
+                flex-direction: column;
+                padding-top: 130px;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .hero-desc {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-btns {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            .kpi-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .nav-menu {
+                display: none; /* Mobile menu logic toggled in JS */
+                position: absolute;
+                top: 75px;
+                left: 0;
+                right: 0;
+                background: var(--bg-secondary);
+                border-bottom: 1px solid var(--border-color);
+                flex-direction: column;
+                padding: 20px;
+                gap: 10px;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-item {
+                width: 100%;
+            }
+
+            .nav-item button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .hero {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .main-content-section {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .info-form {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: span 1;
+            }
+
+            .rating-group {
+                justify-content: space-between;
+            }
+
+            .rating-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+
+            .kpi-row {
+                grid-template-columns: 1fr;
+            }
+
+            .table-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-wrapper {
+                max-width: 100%;
+            }
+
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Markdown rendering custom styles */
+        #aiDetailedReport h1, #aiDetailedReport h2, #aiDetailedReport h3 {
+            color: var(--text-primary);
+            margin-top: 22px;
+            margin-bottom: 12px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+        #aiDetailedReport h3 { font-size: 1.25rem; }
+        #aiDetailedReport p {
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        #aiDetailedReport ul, #aiDetailedReport ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+        #aiDetailedReport li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        #aiDetailedReport strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BACKGROUND GLOW EFFECTS -->
+    <div class="bg-glow-container">
+        <div class="glow-circle glow-1"></div>
+        <div class="glow-circle glow-2"></div>
+        <div class="glow-circle glow-3"></div>
+    </div>
+
+    <!-- GLASSMORPHIC NAVIGATION BAR -->
+    <nav class="navbar glass-card">
+        <div class="nav-logo">
+            <i data-lucide="graduation-cap"></i>
+            <span>UniGuide</span>
+        </div>
+        
+        <ul class="nav-menu" id="navMenu">
+            <li class="nav-item active" id="tabHomeBtn">
+                <button onclick="switchTab('home')">
+                    <i data-lucide="home"></i> Trang Chủ
+                </button>
+            </li>
+            <li class="nav-item" id="tabQuizBtn">
+                <button onclick="switchTab('quiz')">
+                    <i data-lucide="brain-circuit"></i> Trắc Nghiệm Holland
+                </button>
+            </li>
+            <li class="nav-item" id="tabDirectBtn">
+                <button onclick="switchTab('direct')">
+                    <i data-lucide="search"></i> Đã Có Định Hướng
+                </button>
+            </li>
+            <li class="nav-item" id="tabTeacherBtn">
+                <button onclick="switchTab('teacher')">
+                    <i data-lucide="users"></i> Cổng Giáo Viên
+                </button>
+            </li>
+        </ul>
+        
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeToggle" title="Chuyển đổi giao diện">
+                <i data-lucide="sun" id="themeIcon"></i>
+            </button>
+            <button class="mobile-toggle" id="mobileMenuToggle">
+                <i data-lucide="menu" id="menuIcon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ==================== TAB: TRANG CHỦ ==================== -->
+    <section class="tab-panel active" id="panelHome">
+        <div class="hero">
+            <div class="hero-content">
+                <div class="badge-ai">
+                    <i data-lucide="sparkles"></i> Trí Tuệ Nhân Tạo Đồng Hành
+                </div>
+                <h1 class="hero-title">Định hướng tương lai, Khai phá tiềm năng</h1>
+                <p class="hero-desc">UniGuide là trợ lý ảo tuyển sinh cấp cao sử dụng AI thông minh vượt trội, phân tích tính cách qua bài test Holland mở rộng và lịch sử điểm chuẩn để đưa ra gợi ý trường đại học phù hợp nhất dành cho bạn.</p>
+                <div class="hero-btns">
+                    <button class="btn-primary" onclick="switchTab('quiz')">
+                        <i data-lucide="compass"></i> Khám Phá Bản Thân <i data-lucide="arrow-right"></i>
+                    </button>
+                    <button class="btn-secondary" onclick="switchTab('direct')">
+                        <i data-lucide="target"></i> Tìm Trường Nhanh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="floating-ui-card glass-card">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="activity" style="color: var(--primary)"></i> Đang Phân Tích Hồ Sơ...
+                    </h3>
+                    <div class="mock-stat-item">
+                        <span style="font-size: 0.85rem; width: 80px; font-weight: 600;">Nghiên cứu</span>
+                        <div class="mock-stat-bar"><div class="mock-stat-fill" style="width: 85%"></div></div>
+                        <span style="font-size: 0.85rem; font-weight: 700;">85%</span>
+                    </div>
+                    <div class="mock-stat-item">
+                        <span style="font-size: 0.85rem; width: 80px; font-weight: 600;">Kinh doanh</span>
+                        <div class="mock-stat-bar"><div class="mock-stat-fill" style="width: 70%"></div></div>
+                        <span style="font-size: 0.85rem; font-weight: 700;">70%</span>
+                    </div>
+                    <div class="mock-stat-item">
+                        <span style="font-size: 0.85rem; width: 80px; font-weight: 600;">Thực tế</span>
+                        <div class="mock-stat-bar"><div class="mock-stat-fill" style="width: 45%"></div></div>
+                        <span style="font-size: 0.85rem; font-weight: 700;">45%</span>
+                    </div>
+                    
+                    <div class="floating-ui-card-small ui-card-1">
+                        <i data-lucide="shield-check"></i> <span>Trường An Toàn Đạt 98%</span>
+                    </div>
+                    <div class="floating-ui-card-small ui-card-2">
+                        <i data-lucide="trending-up"></i> <span>Tỉ Lệ Chọi 3 Năm Gần Nhất</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FEATURES SECTION -->
+        <div class="features">
+            <div class="section-header">
+                <h2 class="section-title">Tại sao bạn nên chọn UniGuide?</h2>
+                <p class="section-subtitle">Kết hợp nghiên cứu khoa học hành vi và dữ liệu lớn tuyển sinh để đưa ra tư vấn hướng nghiệp tối ưu nhất Việt Nam.</p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="award"></i></div>
+                    <h3>Holland Test Mở Rộng</h3>
+                    <p>Khám phá chính xác nhóm tính cách bản thân trong số 6 nhóm: Thực tế, Nghiên cứu, Nghệ thuật, Xã hội, Kiến tạo/Kinh doanh, Nghiệp vụ.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="database"></i></div>
+                    <h3>Dữ Liệu Điểm Chuẩn 3 Năm</h3>
+                    <p>Cập nhật liên tục điểm chuẩn tất cả các trường Đại học Công lập trên toàn quốc từ 2023 - 2025 giúp đánh giá thực chất khả năng trúng tuyển.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="cpu"></i></div>
+                    <h3>Phân Loại Tiers Thông Minh</h3>
+                    <p>AI tự động sắp xếp các trường thành 3 nhóm rõ rệt: Thử thách, Vừa sức và An toàn để học sinh dễ dàng sắp xếp thứ tự nguyện vọng.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TAB: TRẮC NGHIỆM HOLLAND TỪNG BƯỚC ==================== -->
+    <section class="tab-panel" id="panelQuiz">
+        <div class="main-content-section">
+            <div class="step-container">
+                <div class="panel-header">
+                    <h2>🧩 Trắc Nghiệm Tính Cách & Phân Tích AI</h2>
+                    <p>Khám phá nhóm tính cách Holland và nhận gợi ý phân loại trường đại học công lập tối ưu nhất từ AI.</p>
+                </div>
+                
+                <div class="wizard-card glass-card" id="quizWizardCard">
+                    <!-- Progress Tracker -->
+                    <div class="wizard-progress">
+                        <div class="progress-header">
+                            <span id="progressStepTitle">Nhóm Thực Tế (R) - Bước 1 / 6</span>
+                            <span id="progressPercent">16%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progressBarFill"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question Slides Container -->
+                    <div id="slidesContainer">
+                        <!-- Step 1: Nhóm Thực tế (R) -->
+                        <div class="step-slide active" data-step="1" data-group-name="Thực tế (R)">
+                            <div class="group-badge"><i data-lucide="tool"></i> Thực tế (R)</div>
+                            <p class="group-intro">Nhóm người thích hành động, thích làm việc với đồ vật, máy móc, dụng cụ, thích khám phá tự nhiên và vận động ngoài trời.</p>
+                            
+                            <div class="quiz-question-item">
+                                <p class="question-text">1. Bạn có thích lắp ráp, sửa chữa các thiết bị máy móc, xe cộ trong nhà không?</p>
+                                <div class="rating-group" data-q-id="0">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(0, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(0, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(0, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(0, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(0, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">2. Bạn thích các hoạt động thể chất dã ngoại ngoài trời hoặc làm vườn hơn ngồi văn phòng?</p>
+                                <div class="rating-group" data-q-id="1">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(1, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(1, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(1, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(1, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(1, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">3. Bạn thích tự tay chế tạo các đồ thủ công hoặc lắp ráp mô hình linh kiện?</p>
+                                <div class="rating-group" data-q-id="2">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(2, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(2, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(2, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(2, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(2, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">4. Bạn cảm thấy dễ chịu khi chăm sóc cây cối, động vật hoặc làm các công việc liên quan đến tự nhiên?</p>
+                                <div class="rating-group" data-q-id="3">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(3, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(3, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(3, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(3, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(3, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Nhóm Nghiên cứu (I) -->
+                        <div class="step-slide" data-step="2" data-group-name="Nghiên cứu (I)">
+                            <div class="group-badge"><i data-lucide="search"></i> Nghiên cứu (I)</div>
+                            <p class="group-intro">Nhóm người thích nghiên cứu khoa học, giải quyết vấn đề, phân tích logic, thích đọc sách tìm tòi nguyên lý của tự nhiên.</p>
+                            
+                            <div class="quiz-question-item">
+                                <p class="question-text">5. Bạn có thích tiến hành các thí nghiệm khoa học (Hóa học, Vật lý, Sinh học) không?</p>
+                                <div class="rating-group" data-q-id="4">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(4, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(4, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(4, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(4, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(4, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">6. Bạn có đam mê giải toán đố logic, giải mật mã hoặc lập trình máy tính không?</p>
+                                <div class="rating-group" data-q-id="5">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(5, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(5, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(5, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(5, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(5, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">7. Bạn thích đọc sách khoa học để khám phá các hiện tượng tự nhiên, vũ trụ bí ẩn?</p>
+                                <div class="rating-group" data-q-id="6">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(6, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(6, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(6, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(6, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(6, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">8. Bạn có thường phân tích sâu sắc các bảng số liệu để tìm ra xu hướng, quy luật ẩn giấu?</p>
+                                <div class="rating-group" data-q-id="7">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(7, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(7, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(7, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(7, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(7, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Nhóm Nghệ thuật (A) -->
+                        <div class="step-slide" data-step="3" data-group-name="Nghệ thuật (A)">
+                            <div class="group-badge"><i data-lucide="palette"></i> Nghệ thuật (A)</div>
+                            <p class="group-intro">Nhóm người giàu tính sáng tạo, trí tưởng tượng bay bổng, yêu thích nghệ thuật, cái đẹp, tự do biểu đạt ý kiến của mình.</p>
+                            
+                            <div class="quiz-question-item">
+                                <p class="question-text">9. Bạn có thích vẽ tranh, điêu khắc, thiết kế đồ họa, hay chụp ảnh nghệ thuật không?</p>
+                                <div class="rating-group" data-q-id="8">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(8, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(8, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(8, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(8, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(8, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">10. Bạn thích ca hát, chơi một loại nhạc cụ nào đó hoặc tham gia câu lạc bộ kịch nghệ?</p>
+                                <div class="rating-group" data-q-id="9">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(9, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(9, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(9, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(9, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(9, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">11. Bạn có thích viết lách (sáng tác thơ văn, viết truyện, viết blog trải nghiệm)?</p>
+                                <div class="rating-group" data-q-id="10">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(10, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(10, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(10, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(10, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(10, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">12. Bạn chuộng thời trang độc đáo, tự do thiết kế phong cách cá nhân của riêng mình?</p>
+                                <div class="rating-group" data-q-id="11">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(11, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(11, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(11, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(11, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(11, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Nhóm Xã hội (S) -->
+                        <div class="step-slide" data-step="4" data-group-name="Xã hội (S)">
+                            <div class="group-badge"><i data-lucide="heart"></i> Xã hội (S)</div>
+                            <p class="group-intro">Nhóm người thích giúp đỡ, lắng nghe, chăm sóc người khác, thích làm việc tập thể và cống hiến cho cộng đồng.</p>
+                            
+                            <div class="quiz-question-item">
+                                <p class="question-text">13. Bạn là người đáng tin cậy, thích lắng nghe và chia sẻ tâm sự, gỡ rối khó khăn cho bạn bè?</p>
+                                <div class="rating-group" data-q-id="12">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(12, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(12, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(12, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(12, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(12, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">14. Bạn có nhiệt huyết tham gia các chương trình tình nguyện, từ thiện hỗ trợ xã hội không?</p>
+                                <div class="rating-group" data-q-id="13">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(13, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(13, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(13, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(13, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(13, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">15. Bạn thích giảng dạy, chỉ bài hay hướng dẫn người khác tiếp thu kiến thức mới?</p>
+                                <div class="rating-group" data-q-id="14">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(14, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(14, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(14, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(14, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(14, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">16. Bạn quan tâm và sẵn sàng hỗ trợ chăm sóc sức khỏe cho người bệnh hoặc người cao tuổi?</p>
+                                <div class="rating-group" data-q-id="15">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(15, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(15, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(15, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(15, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(15, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Nhóm Kinh doanh (E) -->
+                        <div class="step-slide" data-step="5" data-group-name="Kinh doanh (E)">
+                            <div class="group-badge"><i data-lucide="trending-up"></i> Kinh doanh (E)</div>
+                            <p class="group-intro">Nhóm người thích làm lãnh đạo, thích thuyết phục người khác, nhạy bén kinh doanh, dám chấp nhận thử thách.</p>
+                            
+                            <div class="quiz-question-item">
+                                <p class="question-text">17. Bạn thích đứng lên tổ chức công việc và làm thủ lĩnh/lãnh đạo của một nhóm hoạt động?</p>
+                                <div class="rating-group" data-q-id="16">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(16, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(16, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(16, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(16, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(16, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">18. Bạn hứng thú với việc bán hàng, tiếp thị hoặc lên kế hoạch khởi nghiệp online kiếm thêm thu nhập?</p>
+                                <div class="rating-group" data-q-id="17">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(17, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(17, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(17, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(17, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(17, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">19. Bạn có thích tham gia tranh biện, thuyết phục mọi người đồng lòng tin tưởng quan điểm của mình?</p>
+                                <div class="rating-group" data-q-id="18">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(18, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(18, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(18, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(18, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(18, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">20. Bạn thường là người thiết kế ý tưởng, lên kế hoạch cho sự kiện, tiệc tùng của trường/lớp?</p>
+                                <div class="rating-group" data-q-id="19">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(19, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(19, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(19, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(19, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(19, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 6: Nhóm Nghiệp vụ (C) -->
+                        <div class="step-slide" data-step="6" data-group-name="Nghiệp vụ (C)">
+                            <div class="group-badge"><i data-lucide="folder-open"></i> Nghiệp vụ (C)</div>
+                            <p class="group-intro">Nhóm người cẩn thận, ngăn nắp, làm việc theo kế hoạch rõ ràng, có năng lực lưu trữ và tính toán số liệu chính xác.</p>
+                            
+                            <div class="quiz-question-item">
+                                <p class="question-text">21. Bạn tỉ mỉ ghi chép chi tiết các khoản thu chi cá nhân hoặc ngân quỹ lớp học?</p>
+                                <div class="rating-group" data-q-id="20">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(20, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(20, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(20, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(20, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(20, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">22. Bạn thích góc học tập ngăn nắp, sắp xếp tài liệu học khoa học để dễ tìm kiếm?</p>
+                                <div class="rating-group" data-q-id="21">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(21, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(21, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(21, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(21, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(21, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">23. Bạn cảm thấy thoải mái với công việc nhập số liệu, sắp xếp bảng tính Excel hay viết báo cáo?</p>
+                                <div class="rating-group" data-q-id="22">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(22, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(22, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(22, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(22, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(22, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                            <div class="quiz-question-item">
+                                <p class="question-text">24. Bạn ưu tiên thực hiện công việc theo một trình tự rõ ràng, luật lệ chuẩn chỉnh có sẵn?</p>
+                                <div class="rating-group" data-q-id="23">
+                                    <span class="rating-label">Rất ghét</span>
+                                    <button class="rating-btn" onclick="rateQuestion(23, 1)">1</button>
+                                    <button class="rating-btn" onclick="rateQuestion(23, 2)">2</button>
+                                    <button class="rating-btn" onclick="rateQuestion(23, 3)">3</button>
+                                    <button class="rating-btn" onclick="rateQuestion(23, 4)">4</button>
+                                    <button class="rating-btn" onclick="rateQuestion(23, 5)">5</button>
+                                    <span class="rating-label">Rất thích</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="wizard-actions">
+                        <button class="btn-secondary" id="btnQuizPrev" onclick="quizPrevStep()" disabled>
+                            <i data-lucide="arrow-left"></i> Quay lại
+                        </button>
+                        <button class="btn-primary" id="btnQuizNext" onclick="quizNextStep()">
+                            Tiếp tục <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 7: Bổ sung Thông tin học sinh (Hiện sau khi xong trắc nghiệm) -->
+                <div class="wizard-card glass-card" id="quizInfoCard" style="display: none;">
+                    <div class="group-badge"><i data-lucide="sparkles"></i> Phân tích cá nhân hóa</div>
+                    <h3 style="font-size: 1.4rem; margin-bottom: 25px;">Bước cuối: Hồ sơ học sinh tuyển sinh</h3>
+                    
+                    <div class="info-form">
+                        <div class="form-group">
+                            <label for="studentName">Họ và tên của bạn</label>
+                            <input type="text" id="studentName" class="form-control-input" placeholder="VD: Nguyễn Văn Anh - Lớp 12A1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentScore">Điểm thi thử THPT dự kiến</label>
+                            <input type="number" step="0.1" id="studentScore" class="form-control-input" placeholder="VD: 24.5" min="0" max="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentSubjectGroup">Tổ hợp môn xét tuyển (Khối thi)</label>
+                            <input type="text" id="studentSubjectGroup" class="form-control-input" placeholder="VD: A00, A01, D01..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentRegion">Khu vực xét tuyển ưu tiên</label>
+                            <select id="studentRegion" class="form-control-input">
+                                <option value="Miền Bắc">Miền Bắc</option>
+                                <option value="Miền Trung">Miền Trung</option>
+                                <option value="Miền Nam">Miền Nam</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="studentPassions">Sở thích, đam mê và hoạt động ngoại khóa nổi bật của bạn</label>
+                            <textarea id="studentPassions" class="form-control-input" placeholder="VD: Em thích mày mò lập trình robot, là thành viên chủ chốt câu lạc bộ STEM của trường lớp..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="wizard-actions">
+                        <button class="btn-secondary" onclick="backToQuiz()">
+                            <i data-lucide="arrow-left"></i> Sửa bài test
+                        </button>
+                        <button class="btn-primary" onclick="submitHollandQuiz()">
+                            ✨ Để AI Lên Danh Sách Trường Ngay
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TAB: ĐÃ CÓ ĐỊNH HƯỚNG (TÌM TRƯỜNG NHANH) ==================== -->
+    <section class="tab-panel" id="panelDirect">
+        <div class="main-content-section">
+            <div class="step-container">
+                <div class="panel-header">
+                    <h2>🎯 Tìm Trường Trực Tiếp (Không qua Trắc nghiệm)</h2>
+                    <p>Nếu bạn đã hiểu rõ tính cách của mình và định hướng rõ ngành nghề, hãy điền hồ sơ bên dưới để AI lập tức tư vấn.</p>
+                </div>
+                
+                <div class="wizard-card glass-card">
+                    <div class="info-form">
+                        <div class="form-group">
+                            <label for="directName">Họ và tên học sinh</label>
+                            <input type="text" id="directName" class="form-control-input" placeholder="VD: Trần Thị Thanh - Lớp 12A2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="directScore">Điểm thi thử dự kiến</label>
+                            <input type="number" step="0.1" id="directScore" class="form-control-input" placeholder="VD: 26.5" min="0" max="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="directSubjectGroup">Tổ hợp môn xét tuyển (Khối thi)</label>
+                            <input type="text" id="directSubjectGroup" class="form-control-input" placeholder="VD: D01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="directRegion">Khu vực muốn xét tuyển</label>
+                            <select id="directRegion" class="form-control-input">
+                                <option value="Miền Bắc">Miền Bắc</option>
+                                <option value="Miền Trung">Miền Trung</option>
+                                <option value="Miền Nam">Miền Nam</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="directIndustry">Ngành học bạn muốn AI phân tích sâu</label>
+                            <input type="text" id="directIndustry" class="form-control-input" placeholder="VD: Marketing, Logistics..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="directPersonality">Bạn thấy mình thuộc nhóm tính cách nào nhất?</label>
+                            <select id="directPersonality" class="form-control-input">
+                                <option value="Nghiên cứu (I) - Logic, Khoa học">Nghiên cứu (I) - Logic, Khoa học</option>
+                                <option value="Kinh doanh (E) - Lãnh đạo, Nhạy bén">Kinh doanh (E) - Lãnh đạo, Nhạy bén</option>
+                                <option value="Nghệ thuật (A) - Sáng tạo, Tự do">Nghệ thuật (A) - Sáng tạo, Tự do</option>
+                                <option value="Thực tế (R) - Kỹ thuật, Thực tế">Thực tế (R) - Kỹ thuật, Thực tế</option>
+                                <option value="Xã hội (S) - Giúp đỡ, Giao tiếp">Xã hội (S) - Giúp đỡ, Giao tiếp</option>
+                                <option value="Nghiệp vụ (C) - Cẩn thận, Tổ chức">Nghiệp vụ (C) - Cẩn thận, Tổ chức</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="directPassions">Sở thích cá nhân hoặc hoạt động ngoại khóa</label>
+                            <textarea id="directPassions" class="form-control-input" placeholder="VD: Thích đọc báo kinh tế, kinh doanh bán quần áo online kiếm tiền..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: right; margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 25px;">
+                        <button class="btn-primary" onclick="submitDirectForm()">
+                            ✨ Để AI Lên Danh Sách Trường <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== HỆ THỐNG GỢI Ý TRƯỜNG DỊCH VỤ AI (AI RECOMMENDATIONS VIEW) ==================== -->
+    <div class="ai-loading-overlay" id="aiLoadingOverlay">
+        <div class="ai-loading-spinner">
+            <div class="spinner-outer"></div>
+            <div class="spinner-inner"></div>
+            <i class="spinner-icon" data-lucide="brain"></i>
+        </div>
+        <div class="loading-text">UniGuide AI Đang Xử Lý...</div>
+        <div class="loading-subtext" id="loadingDynamicMsg">Phân tích đặc điểm tính cách của bạn qua 24 câu hỏi Holland...</div>
+    </div>
+
+    <!-- MÀN HÌNH HIỂN THỊ KẾT QUẢ TƯ VẤN TRỰC QUAN -->
+    <section class="main-content-section results-section" id="sectionResults">
+        <div class="step-container">
+            <div class="panel-header">
+                <h2>📝 Báo Cáo Tư Vấn Tuyển Sinh Riêng Cho Bạn</h2>
+                <p>Báo cáo phân tích chuyên sâu tích hợp điểm chuẩn 3 năm và môi trường đại học được cá nhân hóa bởi AI.</p>
+            </div>
+            
+            <div class="results-header-summary glass-card">
+                <div class="summary-badge-circle" id="resultHollandSymbol">I</div>
+                <div class="summary-info">
+                    <h3 id="resultNameTitle">Chúc mừng Nguyễn Văn Anh!</h3>
+                    <p id="resultHollandIntro">AI phân tích bạn thuộc nhóm tính cách chủ đạo: <strong>Nghiên cứu (I)</strong>. Thích giải quyết các bài toán logic phức tạp, làm khoa học và lập trình công nghệ.</p>
+                </div>
+            </div>
+
+            <!-- TIERS ACCORDION GRID -->
+            <div class="tiers-grid">
+                
+                <!-- TIER 1: THỬ THÁCH (CHALLENGE) -->
+                <div class="tier-section">
+                    <div class="tier-banner challenge">
+                        <i data-lucide="trending-up"></i>
+                        <span>NHÓM THỬ THÁCH (Điểm chuẩn cao hơn điểm của bạn 0.5 - 1.5 điểm)</span>
+                    </div>
+                    <div class="tier-cards-list" id="listTierChallenge">
+                        <!-- Trường sẽ được chèn động từ JS -->
+                    </div>
+                </div>
+
+                <!-- TIER 2: VỪA SỨC (MATCHING) -->
+                <div class="tier-section">
+                    <div class="tier-banner matching">
+                        <i data-lucide="target"></i>
+                        <span>NHÓM VỪA SỨC (Điểm chuẩn ngang bằng hoặc chênh lệch tối thiểu)</span>
+                    </div>
+                    <div class="tier-cards-list" id="listTierMatching">
+                        <!-- Trường xét tuyển chèn động từ JS -->
+                    </div>
+                </div>
+
+                <!-- TIER 3: AN TOÀN (SAFE) -->
+                <div class="tier-section">
+                    <div class="tier-banner safe">
+                        <i data-lucide="shield"></i>
+                        <span>NHÓM AN TOÀN (Lựa chọn dự phòng cực kỳ tin cậy, điểm chuẩn thấp hơn 1.5 - 3 điểm)</span>
+                    </div>
+                    <div class="tier-cards-list" id="listTierSafe">
+                        <!-- Trường dự phòng chèn từ JS -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BẢNG BÁO CÁO CHI TIẾT DẠNG VĂN BẢN TỪ AI -->
+            <div class="glass-card" id="aiReportCard" style="margin-top: 40px; padding: 35px; display: none;">
+                <h3 style="font-size: 1.4rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">
+                    <i data-lucide="sparkles" style="color: var(--primary)"></i> 
+                    <span>Báo Cáo Phân Tích Chuyên Sâu Chi Tiết Từ AI</span>
+                </h3>
+                <div id="aiDetailedReport" style="font-size: 0.95rem; line-height: 1.7; color: var(--text-secondary);">
+                    <!-- Nội dung báo cáo AI -->
+                </div>
+            </div>
+
+            <div class="btn-restart-container">
+                <button class="btn-secondary" onclick="restartUniGuide()">
+                    <i data-lucide="refresh-cw"></i> Thực hiện tư vấn mới
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== TAB: CỔNG GIÁO VIÊN NÂNG CAO ==================== -->
+    <section class="tab-panel" id="panelTeacher">
+        <div class="main-content-section">
+            <!-- Lock Screen (Cần mật mã) -->
+            <div class="teacher-lock-screen glass-card" id="teacherLockScreen">
+                <div class="lock-icon-container">
+                    <i data-lucide="lock"></i>
+                </div>
+                <h3 class="lock-title">Cổng Giáo Viên Hướng Nghiệp</h3>
+                <p class="lock-desc">Nhập mật mã để mở khóa bảng điều khiển theo dõi thống kê nguyện vọng học sinh (Mật khẩu mặc định: <strong>admin123</strong>)</p>
+                <div class="password-input-group">
+                    <input type="password" id="teacherPassword" class="form-control-input" style="text-align: center; font-size: 1.2rem; tracking: 4px;" placeholder="••••••••">
+                    <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="unlockTeacherPortal()">
+                        <i data-lucide="unlock"></i> Đăng nhập hệ thống
+                    </button>
+                    <span id="lockErrorMsg" style="color: var(--tier-challenge); font-size: 0.85rem; font-weight: 600; display: none;">⚠️ Mật khẩu chưa chính xác!</span>
+                </div>
+            </div>
+
+            <!-- Dashboard hoàn chỉnh khi mở khóa thành công -->
+            <div class="teacher-portal-content" id="teacherPortalContent">
+                <div class="panel-header" style="text-align: left; margin-bottom: 35px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;">
+                    <div>
+                        <h2>📊 Bảng Điều Khiển Giáo Viên Hướng Nghiệp</h2>
+                        <p>Theo dõi nguyện vọng, nhóm xu hướng và quản lý tư vấn trực tiếp cho học sinh.</p>
+                    </div>
+                    <button class="btn-secondary" onclick="lockTeacherPortal()" style="border-color: var(--tier-challenge); color: var(--tier-challenge);">
+                        <i data-lucide="log-out"></i> Khóa bảng điều khiển
+                    </button>
+                </div>
+
+                <!-- KPI Quick Stats Row -->
+                <div class="kpi-row">
+                    <div class="kpi-card glass-card">
+                        <div class="kpi-icon"><i data-lucide="graduation-cap"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-val" id="kpiTotalStudents">142</div>
+                            <div class="kpi-label">Tổng Số Học Sinh</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card glass-card">
+                        <div class="kpi-icon"><i data-lucide="star"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-val">24.2 điểm</div>
+                            <div class="kpi-label">Điểm TB Thi Thử</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card glass-card">
+                        <div class="kpi-icon"><i data-lucide="award"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-val">Nghiên Cứu (I)</div>
+                            <div class="kpi-label">Holland Phổ Biến</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card glass-card">
+                        <div class="kpi-icon"><i data-lucide="heart-pulse"></i></div>
+                        <div class="kpi-data">
+                            <div class="kpi-val">IT & Logistics</div>
+                            <div class="kpi-label">Ngành Quan Tâm Nhất</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Layout Grid -->
+                <div class="analytics-grid">
+                    <!-- Holland Distribution Chart -->
+                    <div class="chart-card glass-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title"><i data-lucide="bar-chart-3" style="color:var(--primary); vertical-align: middle; margin-right:8px;"></i> Phân Bố Nhóm Tính Cách Holland</h3>
+                            <span style="font-size: 0.8rem; color: var(--text-tertiary); font-weight: 600;">(Đơn vị: % học sinh)</span>
+                        </div>
+                        <div class="bar-chart-container" id="barChartContainer">
+                            <div class="bar-item">
+                                <div class="bar-fill-wrapper">
+                                    <div class="bar-fill" id="barFillR"><span class="bar-value">12%</span></div>
+                                </div>
+                                <span class="bar-label">R</span>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-fill-wrapper">
+                                    <div class="bar-fill" id="barFillI"><span class="bar-value">32%</span></div>
+                                </div>
+                                <span class="bar-label">I</span>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-fill-wrapper">
+                                    <div class="bar-fill" id="barFillA"><span class="bar-value">18%</span></div>
+                                </div>
+                                <span class="bar-label">A</span>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-fill-wrapper">
+                                    <div class="bar-fill" id="barFillS"><span class="bar-value">15%</span></div>
+                                </div>
+                                <span class="bar-label">S</span>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-fill-wrapper">
+                                    <div class="bar-fill" id="barFillE"><span class="bar-value">16%</span></div>
+                                </div>
+                                <span class="bar-label">E</span>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar-fill-wrapper">
+                                    <div class="bar-fill" id="barFillC"><span class="bar-value">7%</span></div>
+                                </div>
+                                <span class="bar-label">C</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Popular Industries -->
+                    <div class="chart-card glass-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title"><i data-lucide="pie-chart" style="color:var(--accent); vertical-align: middle; margin-right:8px;"></i> Nhóm Ngành Quan Tâm</h3>
+                        </div>
+                        <div class="popular-list">
+                            <div class="pop-item">
+                                <div class="pop-meta">
+                                    <span class="pop-name">Công nghệ thông tin / Dữ liệu</span>
+                                    <span class="pop-count">38 học sinh</span>
+                                </div>
+                                <div class="pop-bar-bg"><div class="pop-bar-fill" id="popBarIT"></div></div>
+                            </div>
+                            <div class="pop-item">
+                                <div class="pop-meta">
+                                    <span class="pop-name">Kinh tế / Quản trị / Marketing</span>
+                                    <span class="pop-count">30 học sinh</span>
+                                </div>
+                                <div class="pop-bar-bg"><div class="pop-bar-fill" id="popBarBiz"></div></div>
+                            </div>
+                            <div class="pop-item">
+                                <div class="pop-meta">
+                                    <span class="pop-name">Ngôn ngữ / Truyền thông đa phương tiện</span>
+                                    <span class="pop-count">25 học sinh</span>
+                                </div>
+                                <div class="pop-bar-bg"><div class="pop-bar-fill" id="popBarArt"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Student Records Table Panel -->
+                <div class="table-card glass-card">
+                    <div class="table-toolbar">
+                        <div class="search-wrapper">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="tableSearchInput" class="search-input" placeholder="Tìm tên học sinh, khối thi, ngành..." oninput="filterTableData()">
+                        </div>
+                        
+                        <div class="toolbar-actions">
+                            <select id="filterHolland" class="select-filter" onchange="filterTableData()">
+                                <option value="">Tất cả tính cách</option>
+                                <option value="R">Thực tế (R)</option>
+                                <option value="I">Nghiên cứu (I)</option>
+                                <option value="A">Nghệ thuật (A)</option>
+                                <option value="S">Xã hội (S)</option>
+                                <option value="E">Kinh doanh (E)</option>
+                                <option value="C">Nghiệp vụ (C)</option>
+                            </select>
+                            
+                            <button class="btn-primary" onclick="exportCSVReport()" style="padding: 10px 20px; font-size: 0.9rem; border-radius: 8px;">
+                                <i data-lucide="download-cloud"></i> Xuất Báo Cáo (CSV)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thời Gian</th>
+                                    <th>Họ và Tên</th>
+                                    <th>Điểm Xét Tuyển</th>
+                                    <th>Khối Thi</th>
+                                    <th>Ngành Quan Tâm</th>
+                                    <th>Holland</th>
+                                    <th>Sở Thích & Đam Mê</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentTableBody">
+                                <!-- Học sinh tự động tạo động từ CSDL mô phỏng JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-logo">
+            <i data-lucide="graduation-cap"></i> UniGuide
+        </div>
+        <ul class="footer-links">
+            <li><a href="#" onclick="switchTab('home')">Trang Chủ</a></li>
+            <li><a href="#" onclick="switchTab('quiz')">Trắc Nghiệm</a></li>
+            <li><a href="#" onclick="switchTab('direct')">Định Hướng</a></li>
+            <li><a href="#" onclick="switchTab('teacher')">Giáo Viên</a></li>
+        </ul>
+        <p>© 2026 UniGuide AI - Hệ thống Hướng nghiệp & Cổng thông tin Tuyển sinh Đại học Công lập.</p>
+    </footer>
+
+    <!-- ==================== LẬP TRÌNH LOGIC INTERACTION (VANILLA JAVASCRIPT) ==================== -->
+    <script>
+        // --- 1. BIẾN TRẠNG THÁI TOÀN CỤC ---
+        let currentTheme = 'dark';
+        let currentQuizStep = 1;
+        const totalQuizSteps = 6;
+        
+        // Lưu trữ điểm đánh giá trắc nghiệm Holland (24 câu)
+        // Group mapping: R (0-3), I (4-7), A (8-11), S (12-15), E (16-19), C (20-23)
+        const quizScores = Array(24).fill(0);
+        
+        // Cơ sở dữ liệu học sinh mô phỏng (Dùng cho Bảng điều khiển Giáo viên)
+        let mockStudents = [
+            { id: 1, date: "2026-05-26 09:12:45", name: "Nguyễn Văn Anh - Lớp 12A1", score: 24.5, block: "A01", industry: "Công nghệ thông tin", holland: "I", passion: "Thích lập trình robot, chơi cờ vua, nghiên cứu thuật toán máy tính." },
+            { id: 2, date: "2026-05-25 15:43:21", name: "Trần Thị Thanh - Lớp 12A2", score: 26.5, block: "D01", industry: "Marketing", holland: "E", passion: "Kinh doanh bán quần áo online, chủ nhiệm câu lạc bộ thuyết trình." },
+            { id: 3, date: "2026-05-25 10:20:11", name: "Phạm Minh Hoàng - Lớp 12 Lý", score: 28.0, block: "A00", industry: "Khoa học dữ liệu", holland: "I", passion: "Đam mê phân tích dữ liệu thể thao, giải các phương trình toán học phức tạp." },
+            { id: 4, date: "2026-05-24 16:05:32", name: "Lê Mỹ Linh - Lớp 12 Tin", score: 23.5, block: "A01", industry: "Thiết kế đồ họa", holland: "A", passion: "Vẽ minh họa truyện tranh, thiết kế banner sự kiện cho đoàn trường học." },
+            { id: 5, date: "2026-05-24 08:30:19", name: "Vũ Đức Huy - Lớp 12A4", score: 21.0, block: "D01", industry: "Sư phạm Tiếng Anh", holland: "S", passion: "Hay đi dạy kèm tình nguyện cho trẻ em nghèo, rất thích giao lưu chia sẻ." },
+            { id: 6, date: "2026-05-23 14:15:00", name: "Hoàng Kim Ngân - Lớp 12 Hóa", score: 25.2, block: "B00", industry: "Dược học", holland: "I", passion: "Yêu thích làm thí nghiệm chất hóa học, quan tâm tới y học gia đình." },
+            { id: 7, date: "2026-05-22 11:22:33", name: "Đỗ Bảo Nam - Lớp 12A1", score: 22.8, block: "A00", industry: "Kỹ thuật Cơ khí", holland: "R", passion: "Thích tháo lắp máy móc sửa xe máy giúp bố, lắp ráp đồ chơi lego." },
+            { id: 8, date: "2026-05-22 09:05:12", name: "Nguyễn Lê Vy - Lớp 12A3", score: 24.0, block: "C00", industry: "Luật Kinh tế", holland: "E", passion: "Tranh biện sắc bén, có tư duy tổ chức sự kiện và thương thuyết vượt trội." }
+        ];
+
+        // Dữ liệu Đại học công lập mô phỏng được tuyển chọn rất chất lượng tại Việt Nam
+        const universityDatabase = {
+            "Miền Bắc": {
+                "Công nghệ thông tin": [
+                    { name: "Đại học Bách Khoa Hà Nội (HUST)", block: "A00, A01", scoreChallenge: 28.5, scoreMatch: 26.5, scoreSafe: 24.5, ratio: "1 chọi 12", why: "Môi trường học thuật đỉnh cao, quy tụ sinh viên ưu tú nhất, phù hợp nhóm Nghiên cứu (I) của bạn.", campus: "Khuôn viên xanh 26 hecta giữa lòng Hà Nội, thư viện Tạ Quang Bửu hiện đại nhất cả nước." },
+                    { name: "Trường ĐH Công nghệ - ĐHQGHN (UET)", block: "A00, A01", scoreChallenge: 27.8, scoreMatch: 25.8, scoreSafe: 23.8, ratio: "1 chọi 9", why: "Đào tạo nghiên cứu sâu sắc, cơ sở vật chất chuẩn quốc tế, giảng viên trình độ cao.", campus: "Phòng thí nghiệm trọng điểm, liên kết chặt chẽ với các tập đoàn công nghệ lớn." },
+                    { name: "Học viện Công nghệ Bưu chính Viễn thông (PTIT)", block: "A00, A01, D01", scoreChallenge: 26.5, scoreMatch: 24.8, scoreSafe: 22.5, ratio: "1 chọi 7", why: "Chương trình thực tiễn, trang bị phòng máy cao cấp, phù hợp xu thế đổi mới công nghệ.", campus: "Môi trường năng động, phong trào ngoại khóa phát triển mạnh mẽ." },
+                    { name: "Đại học Giao thông Vận tải (UTC)", block: "A00, A01", scoreChallenge: 25.0, scoreMatch: 23.5, scoreSafe: 21.0, ratio: "1 chọi 5", why: "Chất lượng công lập bền vững, tập trung vào lập trình ứng dụng hệ thống giao thông thông minh.", campus: "Đội ngũ giảng viên gạo cội, chi phí sinh hoạt học phí rất phù hợp túi tiền." }
+                ],
+                "Marketing": [
+                    { name: "Đại học Kinh tế Quốc dân (NEU)", block: "A01, D01, D07", scoreChallenge: 28.0, scoreMatch: 26.8, scoreSafe: 24.5, ratio: "1 chọi 15", why: "Cổng thông tin hướng nghiệp NEU cực mạnh, hoàn hảo cho nhóm người Kinh doanh (E) thích tiên phong.", campus: "Tòa nhà thế kỷ sang trọng bậc nhất, cơ sở vật chất 5 sao, thư viện điện tử khổng lồ." },
+                    { name: "Trường Đại học Ngoại thương (FTU)", block: "A00, A01, D01", scoreChallenge: 28.5, scoreMatch: 27.2, scoreSafe: 25.5, ratio: "1 chọi 18", why: "Nơi ươm mầm tài năng lãnh đạo trẻ, phong trào tiếng Anh và đối ngoại năng động vượt bậc.", campus: "Môi trường học siêu cởi mở, kết nối mạng lưới cựu sinh viên thành đạt toàn cầu." },
+                    { name: "Trường Đại học Thương mại (TMU)", block: "A01, D01", scoreChallenge: 26.8, scoreMatch: 25.0, scoreSafe: 23.0, ratio: "1 chọi 8", why: "Đào tạo bài bản về thương mại điện tử, Marketing thực chiến phù hợp đam mê bán hàng.", campus: "Cảnh quan sư phạm xanh mát, câu lạc bộ truyền thông tổ chức nhiều sự kiện lớn." }
+                ]
+            },
+            "Miền Nam": {
+                "Công nghệ thông tin": [
+                    { name: "Đại học Bách Khoa - ĐHQG TP.HCM (HCMUT)", block: "A00, A01", scoreChallenge: 28.2, scoreMatch: 26.2, scoreSafe: 24.2, ratio: "1 chọi 11", why: "Thương hiệu kỹ thuật hàng đầu phía Nam, rèn luyện tư duy logic và chịu áp lực cực tốt.", campus: "Khuôn viên Thủ Đức thoáng đãng, phòng thí nghiệm hiện đại tiêu chuẩn ABET quốc tế." },
+                    { name: "Trường ĐH Công nghệ Thông tin - ĐHQG TP.HCM (UIT)", block: "A00, A01, D01", scoreChallenge: 27.5, scoreMatch: 25.5, scoreSafe: 23.5, ratio: "1 chọi 10", why: "Đào tạo chuyên sâu công nghệ và trí tuệ nhân tạo, sân chơi lập trình lớn, vô cùng phù hợp với bạn.", campus: "Tòa nhà kính mờ tuyệt đẹp tại Làng Đại Học, các CLB game và an toàn thông tin rất nổi tiếng." },
+                    { name: "Trường Đại học Sư phạm Kỹ thuật TP.HCM (HCMUTE)", block: "A00, A01, D01", scoreChallenge: 26.0, scoreMatch: 24.2, scoreSafe: 22.0, ratio: "1 chọi 7", why: "Thiết kế giáo trình giàu tính ứng dụng, thực hành trực tiếp tại các xưởng công nghệ lớn.", campus: "Xưởng thực hành máy móc robot triệu đô, các giải đua xe tiết kiệm nhiên liệu thú vị." }
+                ],
+                "Marketing": [
+                    { name: "Đại học Kinh tế TP.HCM (UEH)", block: "A01, D01, D07", scoreChallenge: 27.8, scoreMatch: 26.0, scoreSafe: 24.0, ratio: "1 chọi 14", why: "Thương hiệu Kinh tế danh giá nhất miền Nam, kết hợp Marketing với phân tích dữ liệu lớn hiện đại.", campus: "Các cơ sở quận trung tâm hiện đại, phong trào văn nghệ và đoàn hội vô cùng sôi nổi." },
+                    { name: "Trường Đại học Kinh tế - Luật (UEL)", block: "A00, A01, D01", scoreChallenge: 26.8, scoreMatch: 25.2, scoreSafe: 23.0, ratio: "1 chọi 9", why: "Tập trung sâu vào Luật kinh tế thương mại và Marketing số hóa, đào tạo tư duy nhạy bén thị trường.", campus: "Nằm tại Thủ Đức thơ mộng, thư viện tích hợp công nghệ cao phục vụ nghiên cứu và tự học mượt mà." }
+                ]
+            },
+            "Miền Trung": {
+                "Công nghệ thông tin": [
+                    { name: "Trường Đại học Bách Khoa - Đại học Đà Nẵng (DUT)", block: "A00, A01", scoreChallenge: 25.8, scoreMatch: 24.0, scoreSafe: 22.0, ratio: "1 chọi 7", why: "Trung tâm đào tạo nhân tài công nghệ cốt lõi của toàn miền Trung, giàu truyền thống và thực chất.", campus: "Khuôn viên sát biển tuyệt đẹp, phòng Lab nghiên cứu hợp tác trực tiếp với Nhật Bản và Âu Mỹ." },
+                    { name: "Trường Đại học Sư phạm Kỹ thuật - Đại học Đà Nẵng (UTE-UDN)", block: "A00, A01", scoreChallenge: 24.0, scoreMatch: 22.2, scoreSafe: 20.0, ratio: "1 chọi 4", why: "Tập trung tối đa vào kỹ năng tay nghề và lập trình ứng dụng thực tế.", campus: "Trang thiết bị cập nhật mới, giảng đường thông minh năng động." }
+                ],
+                "Marketing": [
+                    { name: "Trường Đại học Kinh tế - Đại học Đà Nẵng (DUE)", block: "A01, D01", scoreChallenge: 25.5, scoreMatch: 23.8, scoreSafe: 21.5, ratio: "1 chọi 8", why: "Môi trường học tập kinh doanh năng động số một miền Trung, định hình tư duy khởi nghiệp toàn diện.", campus: "Giảng đường hiện đại, các lễ hội Festival Marketing danh giá do sinh viên tự tổ chức." }
+                ]
+            }
+        };
+
+        // --- 2. HÀM KHỞI CHẠY BAN ĐẦU ---
+        document.addEventListener("DOMContentLoaded", () => {
+            // Render icon Lucide sắc nét
+            lucide.createIcons();
+            
+            // Thiết lập theme tối làm mặc định lúc đầu
+            document.documentElement.setAttribute('data-theme', 'dark');
+            
+            // Cài đặt nút Light/Dark Mode
+            const themeBtn = document.getElementById("themeToggle");
+            themeBtn.addEventListener("click", () => {
+                if (currentTheme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    currentTheme = 'light';
+                    document.getElementById("themeIcon").setAttribute("data-lucide", "moon");
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    currentTheme = 'dark';
+                    document.getElementById("themeIcon").setAttribute("data-lucide", "sun");
+                }
+                lucide.createIcons();
+            });
+
+            // Tự động tải danh sách sinh viên ban đầu vào Cổng giáo viên
+            renderStudentTable(mockStudents);
+
+            // Responsive menu toggle cho Mobile
+            const mobileMenuBtn = document.getElementById("mobileMenuToggle");
+            const navMenu = document.getElementById("navMenu");
+            mobileMenuBtn.addEventListener("click", () => {
+                navMenu.classList.toggle("active");
+                const icon = navMenu.classList.contains("active") ? "x" : "menu";
+                document.getElementById("menuIcon").setAttribute("data-lucide", icon);
+                lucide.createIcons();
+            });
+        });
+
+        // --- 3. ĐIỀU HƯỚNG TAB CHUYỂN ĐỔI MƯỢT MÀ ---
+        function switchTab(tabId) {
+            // Ẩn tất cả các panel chính
+            document.querySelectorAll(".tab-panel").forEach(panel => {
+                panel.classList.remove("active");
+            });
+            // Ẩn bảng kết quả
+            document.getElementById("sectionResults").style.display = "none";
+            
+            // Bỏ active tất cả các tab ở Navbar
+            document.getElementById("tabHomeBtn").classList.remove("active");
+            document.getElementById("tabQuizBtn").classList.remove("active");
+            document.getElementById("tabDirectBtn").classList.remove("active");
+            document.getElementById("tabTeacherBtn").classList.remove("active");
+            
+            // Kích hoạt panel tương ứng
+            if (tabId === 'home') {
+                document.getElementById("panelHome").classList.add("active");
+                document.getElementById("tabHomeBtn").classList.add("active");
+            } else if (tabId === 'quiz') {
+                document.getElementById("panelQuiz").classList.add("active");
+                document.getElementById("tabQuizBtn").classList.add("active");
+                resetQuizWizard();
+            } else if (tabId === 'direct') {
+                document.getElementById("panelDirect").classList.add("active");
+                document.getElementById("tabDirectBtn").classList.add("active");
+            } else if (tabId === 'teacher') {
+                document.getElementById("panelTeacher").classList.add("active");
+                document.getElementById("tabTeacherBtn").classList.add("active");
+            }
+            
+            // Đóng menu mobile sau khi click điều hướng
+            document.getElementById("navMenu").classList.remove("active");
+            document.getElementById("menuIcon").setAttribute("data-lucide", "menu");
+            lucide.createIcons();
+            
+            // Cuộn trang lên đỉnh mượt mà
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- 4. LOGIC TRẮC NGHIỆM HOLLAND TỪNG BƯỚC (WIZARD) ---
+        function resetQuizWizard() {
+            currentQuizStep = 1;
+            quizScores.fill(0);
+            
+            // Xóa các trạng thái lựa chọn nút
+            document.querySelectorAll(".rating-btn").forEach(btn => {
+                btn.classList.remove("selected");
+            });
+            
+            // Hiển thị lại slide đầu tiên
+            document.getElementById("quizWizardCard").style.display = "block";
+            document.getElementById("quizInfoCard").style.display = "none";
+            showQuizSlide(1);
+        }
+
+        function showQuizSlide(stepNumber) {
+            document.querySelectorAll(".step-slide").forEach(slide => {
+                slide.classList.remove("active");
+            });
+            const activeSlide = document.querySelector(`.step-slide[data-step="${stepNumber}"]`);
+            activeSlide.classList.add("active");
+            
+            // Cập nhật Progress
+            const stepTitle = activeSlide.getAttribute("data-group-name");
+            document.getElementById("progressStepTitle").textContent = `Nhóm ${stepTitle} - Bước ${stepNumber} / 6`;
+            
+            const percent = Math.round((stepNumber / totalQuizSteps) * 100);
+            document.getElementById("progressPercent").textContent = `${percent}%`;
+            document.getElementById("progressBarFill").style.width = `${percent}%`;
+            
+            // Cập nhật nút điều hướng
+            document.getElementById("btnQuizPrev").disabled = (stepNumber === 1);
+            if (stepNumber === totalQuizSteps) {
+                document.getElementById("btnQuizNext").innerHTML = `Hoàn thành Test <i data-lucide="check"></i>`;
+            } else {
+                document.getElementById("btnQuizNext").innerHTML = `Tiếp tục <i data-lucide="arrow-right"></i>`;
+            }
+            lucide.createIcons();
+        }
+
+        function rateQuestion(questionIndex, ratingValue) {
+            quizScores[questionIndex] = ratingValue;
+            
+            // Highlight nút vừa click chọn
+            const ratingGroup = document.querySelector(`.rating-group[data-q-id="${questionIndex}"]`);
+            ratingGroup.querySelectorAll(".rating-btn").forEach(btn => {
+                btn.classList.remove("selected");
+                if (parseInt(btn.textContent) === ratingValue) {
+                    btn.classList.add("selected");
+                }
+            });
+        }
+
+        function quizPrevStep() {
+            if (currentQuizStep > 1) {
+                currentQuizStep--;
+                showQuizSlide(currentQuizStep);
+            }
+        }
+
+        function quizNextStep() {
+            // Kiểm tra xem học sinh đã tích đủ điểm cho các câu hỏi ở slide hiện tại chưa
+            const startIndex = (currentQuizStep - 1) * 4;
+            const endIndex = startIndex + 4;
+            for (let i = startIndex; i < endIndex; i++) {
+                if (quizScores[i] === 0) {
+                    alert("Vui lòng đánh giá đầy đủ tất cả câu hỏi trong nhóm này trước khi tiếp tục!");
+                    return;
+                }
+            }
+
+            if (currentQuizStep < totalQuizSteps) {
+                currentQuizStep++;
+                showQuizSlide(currentQuizStep);
+            } else {
+                // Đi tới Form nhập thông tin học sinh sau khi hoàn thành 24 câu trắc nghiệm
+                document.getElementById("quizWizardCard").style.display = "none";
+                document.getElementById("quizInfoCard").style.display = "block";
+                window.scrollTo({ top: 100, behavior: 'smooth' });
+            }
+        }
+
+        function backToQuiz() {
+            document.getElementById("quizWizardCard").style.display = "block";
+            document.getElementById("quizInfoCard").style.display = "none";
+        }
+
+        // --- 5. LOGIC PHÂN TÍCH VÀ HIỂN THỊ KẾT QUẢ AI ---
+        function submitHollandQuiz() {
+            const name = document.getElementById("studentName").value.trim();
+            const score = parseFloat(document.getElementById("studentScore").value);
+            const block = document.getElementById("studentSubjectGroup").value.trim().toUpperCase();
+            const region = document.getElementById("studentRegion").value;
+            const passions = document.getElementById("studentPassions").value.trim();
+
+            if (!name || isNaN(score) || !block) {
+                alert("Vui lòng điền đầy đủ Họ tên, Điểm thi thử và Khối thi xét tuyển!");
+                return;
+            }
+
+            // Tính điểm các nhóm Holland để tìm ra nhóm cao nhất
+            // R: 0-3, I: 4-7, A: 8-11, S: 12-15, E: 16-19, C: 20-23
+            const groupSums = {
+                "R": sumRange(quizScores, 0, 4),
+                "I": sumRange(quizScores, 4, 8),
+                "A": sumRange(quizScores, 8, 12),
+                "S": sumRange(quizScores, 12, 16),
+                "E": sumRange(quizScores, 16, 20),
+                "C": sumRange(quizScores, 20, 24)
+            };
+
+            // Tìm nhóm cao điểm nhất
+            let highestGroup = "I";
+            let maxVal = -1;
+            for (const [group, sum] of Object.entries(groupSums)) {
+                if (sum > maxVal) {
+                    maxVal = sum;
+                    highestGroup = group;
+                }
+            }
+
+            // Khởi tạo các nhóm ngành tương ứng Holland
+            const hollandIndustryMap = {
+                "R": "Công nghệ thông tin",
+                "I": "Công nghệ thông tin",
+                "A": "Thiết kế đồ họa",
+                "S": "Sư phạm Tiếng Anh",
+                "E": "Marketing",
+                "C": "Kế toán"
+            };
+            const suggestedIndustry = hollandIndustryMap[highestGroup];
+
+            const isOnline = window.location.protocol.startsWith('http');
+
+            triggerAILoadingAnimation(() => {
+                if (isOnline) {
+                    fetch('/api/get_advice', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: name,
+                            score: score,
+                            block: block,
+                            region: region,
+                            holland: highestGroup,
+                            passions: passions,
+                            industry: suggestedIndustry
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            displayAIResults(name, score, block, region, highestGroup, suggestedIndustry, passions);
+                            document.getElementById("aiReportCard").style.display = "block";
+                            document.getElementById("aiDetailedReport").innerHTML = marked.parse(data.advice);
+                        } else {
+                            throw new Error(data.error || "Lỗi máy chủ!");
+                        }
+                    })
+                    .catch(err => {
+                        console.warn("Lỗi API, chuyển sang mock data:", err);
+                        displayAIResults(name, score, block, region, highestGroup, suggestedIndustry, passions);
+                        document.getElementById("aiReportCard").style.display = "block";
+                        document.getElementById("aiDetailedReport").innerHTML = `<p style='color:var(--tier-matching)'>⚠️ <strong>Hệ thống đang hoạt động ở chế độ Offline dự phòng do gặp sự cố kết nối.</strong><br>Chi tiết: ${err.message}.</p><hr style='border:1px dashed var(--border-color); margin:15px 0;'><p>Hãy chắc chắn rằng bạn đã cấu hình khóa bảo mật <code>GROQ_API_KEY</code> đầy đủ trên server!</p>`;
+                    });
+                } else {
+                    displayAIResults(name, score, block, region, highestGroup, suggestedIndustry, passions);
+                    document.getElementById("aiReportCard").style.display = "block";
+                    document.getElementById("aiDetailedReport").innerHTML = `<p style='color:var(--tier-matching)'>⚠️ <strong>Hệ thống đang chạy offline từ tệp tĩnh index.html.</strong><br>Để kích hoạt kết nối AI thời gian thực và CSDL SQLite, hãy chạy backend thông qua máy chủ Flask (<code>python app.py</code>).</p>`;
+                }
+            });
+        }
+
+        function submitDirectForm() {
+            const name = document.getElementById("directName").value.trim();
+            const score = parseFloat(document.getElementById("directScore").value);
+            const block = document.getElementById("directSubjectGroup").value.trim().toUpperCase();
+            const region = document.getElementById("directRegion").value;
+            const industryInput = document.getElementById("directIndustry").value.trim();
+            const personality = document.getElementById("directPersonality").value;
+            const passions = document.getElementById("directPassions").value.trim();
+
+            if (!name || isNaN(score) || !block || !industryInput) {
+                alert("Vui lòng nhập đầy đủ các thông tin bắt buộc!");
+                return;
+            }
+
+            const hollandChar = personality.charAt(0); // Lấy chữ cái R, I, A, S, E, C từ text
+
+            const isOnline = window.location.protocol.startsWith('http');
+
+            triggerAILoadingAnimation(() => {
+                if (isOnline) {
+                    fetch('/api/get_advice', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: name,
+                            score: score,
+                            block: block,
+                            region: region,
+                            holland: hollandChar,
+                            passions: passions,
+                            industry: industryInput
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            displayAIResults(name, score, block, region, hollandChar, industryInput, passions);
+                            document.getElementById("aiReportCard").style.display = "block";
+                            document.getElementById("aiDetailedReport").innerHTML = marked.parse(data.advice);
+                        } else {
+                            throw new Error(data.error || "Lỗi máy chủ!");
+                        }
+                    })
+                    .catch(err => {
+                        console.warn("Lỗi API, chuyển sang mock data:", err);
+                        displayAIResults(name, score, block, region, hollandChar, industryInput, passions);
+                        document.getElementById("aiReportCard").style.display = "block";
+                        document.getElementById("aiDetailedReport").innerHTML = `<p style='color:var(--tier-matching)'>⚠️ <strong>Hệ thống đang hoạt động ở chế độ Offline dự phòng do gặp sự cố kết nối.</strong><br>Chi tiết: ${err.message}.</p>`;
+                    });
+                } else {
+                    displayAIResults(name, score, block, region, hollandChar, industryInput, passions);
+                    document.getElementById("aiReportCard").style.display = "block";
+                    document.getElementById("aiDetailedReport").innerHTML = `<p style='color:var(--tier-matching)'>⚠️ <strong>Hệ thống đang chạy offline từ tệp tĩnh index.html.</strong><br>Để kích hoạt kết nối AI thời gian thực và CSDL SQLite, hãy chạy backend thông qua máy chủ Flask (<code>python app.py</code>).</p>`;
+                }
+            });
+        }
+
+        function sumRange(arr, start, end) {
+            let sum = 0;
+            for (let i = start; i < end; i++) {
+                sum += arr[i];
+            }
+            return sum;
+        }
+
+        function triggerAILoadingAnimation(onComplete) {
+            const overlay = document.getElementById("aiLoadingOverlay");
+            const dynamicMsg = document.getElementById("loadingDynamicMsg");
+            overlay.style.display = "flex";
+
+            const messages = [
+                "Đang phân tích đặc điểm tính cách Holland cá nhân hóa...",
+                "Đang quét thông tin điểm chuẩn 3 năm của 150+ trường Đại học Công lập...",
+                "Đang lọc các điều kiện ưu tiên vùng miền xét tuyển...",
+                "Đang chạy giải thuật xếp nhóm Tiers (Thử thách - Vừa sức - An toàn)...",
+                "Hoàn thành! Đang thiết lập bảng phân tích tư vấn trực quan..."
+            ];
+
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < messages.length) {
+                    dynamicMsg.textContent = messages[index];
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    overlay.style.display = "none";
+                    onComplete();
+                }
+            }, 1000);
+        }
+
+        function displayAIResults(name, score, block, region, hollandGroup, industry, passions) {
+            // Ẩn các panel trắc nghiệm/tìm trường trực tiếp
+            document.querySelectorAll(".tab-panel").forEach(panel => {
+                panel.classList.remove("active");
+            });
+
+            // Hiện màn hình kết quả
+            const resultsSection = document.getElementById("sectionResults");
+            resultsSection.style.display = "block";
+            window.scrollTo({ top: 100, behavior: 'smooth' });
+
+            // Điền thông tin tiêu đề tóm tắt
+            document.getElementById("resultHollandSymbol").textContent = hollandGroup;
+            document.getElementById("resultNameTitle").innerHTML = `Chào bạn, <strong>${name}</strong>! Đây là kết quả tư vấn dành riêng cho bạn`;
+            
+            const groupFullNames = {
+                "R": "Thực tế (R)",
+                "I": "Nghiên cứu (I)",
+                "A": "Nghệ thuật (A)",
+                "S": "Xã hội (S)",
+                "E": "Kinh doanh (E)",
+                "C": "Nghiệp vụ (C)"
+            };
+
+            const hollandDescriptions = {
+                "R": "Bạn thích hành động, làm việc với máy móc, chế tạo vật lý kỹ thuật. Phù hợp các ngành công nghệ thực chiến, vận tải kỹ thuật cơ khí.",
+                "I": "Bạn có tư duy logic sắc sảo, thích phân tích, học hỏi và tìm tòi bản chất sự vật. Rất xuất sắc khi dấn thân vào Khoa học dữ liệu, CNTT và Nghiên cứu phát triển.",
+                "A": "Bạn bay bổng, tràn đầy sáng tạo nghệ thuật, tôn thờ cái đẹp cá nhân. Thích hợp làm việc trong môi trường truyền thông đa phương tiện, thiết kế đồ họa, thời trang ngôn ngữ.",
+                "S": "Bạn nhân hậu, giỏi lắng nghe và kết nối cảm xúc xã hội. Các ngành Sư phạm, tâm lý học, y khoa sức khỏe cộng đồng là điểm tựa hoàn hảo.",
+                "E": "Bạn có khí chất thủ lĩnh, nhạy bén nắm bắt cơ hội thương trường và thuyết phục người khác. Quản trị kinh doanh, Marketing điện tử, Luật kinh tế chính là dành cho bạn.",
+                "C": "Bạn ngăn nắp, tỉ mỉ, có trách nhiệm cao và làm việc cực kỳ hệ thống. Phù hợp tuyệt đối với Kế toán tài chính, kiểm toán, quản trị văn phòng số hóa."
+            };
+
+            document.getElementById("resultHollandIntro").innerHTML = `Dựa trên phân tích, bạn thuộc nhóm tính cách chủ đạo: <strong>${groupFullNames[hollandGroup]}</strong>. ${hollandDescriptions[hollandGroup]} Ngành học gợi ý tối ưu nhất cho bạn là <strong>${industry}</strong>.`;
+
+            // Lấy danh sách các trường phù hợp trong khu vực. Nếu không có ngành cụ thể trong cơ sở dữ liệu, ta dùng mặc định CNTT hoặc Marketing
+            let searchIndustryKey = "Công nghệ thông tin";
+            if (industry.toLowerCase().includes("marketing") || industry.toLowerCase().includes("kinh tế") || industry.toLowerCase().includes("luật") || industry.toLowerCase().includes("quản trị")) {
+                searchIndustryKey = "Marketing";
+            }
+
+            const regionDb = universityDatabase[region] || universityDatabase["Miền Bắc"];
+            const schoolsList = regionDb[searchIndustryKey] || regionDb["Công nghệ thông tin"];
+
+            // Phân loại các trường vào 3 Tiers dựa trên điểm thi thử của học sinh
+            // Challenge: điểm tuyển sinh lớn hơn score
+            // Match: điểm tuyển sinh xấp xỉ score
+            // Safe: điểm tuyển sinh nhỏ hơn score
+            const challengeList = [];
+            const matchingList = [];
+            const safeList = [];
+
+            schoolsList.forEach(school => {
+                const diff = school.scoreMatch - score;
+                // Tạo một bản sao trường để điều chỉnh điểm phù hợp với điểm nhập của học sinh
+                const customSchool = { ...school };
+                // Giả định điểm chuẩn các năm dịch chuyển ngẫu nhiên nhẹ cho chân thực
+                customSchool.y2025 = customSchool.scoreMatch.toFixed(1);
+                customSchool.y2024 = (customSchool.scoreMatch - 0.4).toFixed(1);
+                customSchool.y2023 = (customSchool.scoreMatch - 0.8).toFixed(1);
+
+                if (diff > 0.8) {
+                    challengeList.push(customSchool);
+                } else if (diff >= -1.2) {
+                    matchingList.push(customSchool);
+                } else {
+                    safeList.push(customSchool);
+                }
+            });
+
+            // Xử lý dự phòng nếu một nhóm rỗng để giao diện luôn đầy đặn
+            if (challengeList.length === 0) {
+                challengeList.push({
+                    name: `Đại học Công lập Top Đầu ${region}`,
+                    block: block,
+                    y2025: (score + 1.5).toFixed(1),
+                    y2024: (score + 1.2).toFixed(1),
+                    y2023: (score + 0.9).toFixed(1),
+                    scoreChallenge: score + 1.5,
+                    ratio: "1 chọi 15",
+                    why: `Môi trường mơ ước để đột phá bản thân cho học sinh khối ${block}, phù hợp cá tính đam mê của bạn.`,
+                    campus: "Cơ sở vật chất tối tân, cơ hội học bổng nghiên cứu sâu sắc."
+                });
+            }
+            if (matchingList.length === 0) {
+                matchingList.push({
+                    name: `Đại học Công lập Trọng Điểm ${region}`,
+                    block: block,
+                    y2025: score.toFixed(1),
+                    y2024: (score - 0.3).toFixed(1),
+                    y2023: (score - 0.6).toFixed(1),
+                    scoreMatch: score,
+                    ratio: "1 chọi 8",
+                    why: `Ngành ${industry} cực hot tại khu vực, đào tạo định hướng thực tiễn cao độ phù hợp nhóm Holland của bạn.`,
+                    campus: "Phòng máy thực hành chuẩn doanh nghiệp, nhiều hoạt động ngoại khóa."
+                });
+            }
+            if (safeList.length === 0) {
+                safeList.push({
+                    name: `Đại học Công nghệ Địa phương ${region}`,
+                    block: block,
+                    y2025: (score - 2.0).toFixed(1),
+                    y2024: (score - 2.2).toFixed(1),
+                    y2023: (score - 2.5).toFixed(1),
+                    scoreSafe: score - 2.0,
+                    ratio: "1 chọi 4",
+                    why: "Cơ hội đỗ 99.9%, môi trường học an toàn ít áp lực để phát triển sở thích riêng.",
+                    campus: "Hỗ trợ ký túc xá rộng rãi, học phí công lập ưu đãi tối đa."
+                });
+            }
+
+            // Render danh sách trường ra các HTML Container
+            renderSchoolTier("listTierChallenge", challengeList, block, passions, "challenge");
+            renderSchoolTier("listTierMatching", matchingList, block, passions, "matching");
+            renderSchoolTier("listTierSafe", safeList, block, passions, "safe");
+            
+            lucide.createIcons();
+        }
+
+        function renderSchoolTier(containerId, list, block, passions, tierType) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+
+            list.forEach((school, index) => {
+                const card = document.createElement("div");
+                card.className = "university-card";
+                
+                // Trích dẫn logo bằng chữ cái đầu của trường
+                const shortName = school.name.split(" ").map(w => w[0]).join("").replace(/[^a-zA-Z]/g, "").substring(0, 3).toUpperCase();
+                
+                const scoreShow = tierType === 'challenge' ? (school.scoreChallenge || school.y2025) : (tierType === 'matching' ? (school.scoreMatch || school.y2025) : (school.scoreSafe || school.y2025));
+
+                card.innerHTML = `
+                    <button class="card-header-trigger" onclick="toggleCardAccordion(this)">
+                        <div class="univ-main-info">
+                            <div class="univ-logo-placeholder">${shortName}</div>
+                            <div class="univ-meta">
+                                <h4>${school.name}</h4>
+                                <p>
+                                    <span><i data-lucide="book-open"></i> Khối: ${block}</span>
+                                    <span><i data-lucide="eye"></i> ${school.ratio}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div class="univ-score-badge">Chuẩn 2025: ${scoreShow}đ</div>
+                            <i data-lucide="chevron-down" class="chevron-icon"></i>
+                        </div>
+                    </button>
+                    <div class="card-expand-content">
+                        <div class="analysis-grid">
+                            <div class="analysis-block">
+                                <h5><i data-lucide="bar-chart-3"></i> Lịch sử điểm chuẩn & Xu hướng</h5>
+                                <div class="stat-badge-row">
+                                    <div class="mini-stat-badge">
+                                        <span class="label">Năm 2023</span>
+                                        <span class="val">${school.y2023 || (parseFloat(scoreShow) - 0.8).toFixed(1)}</span>
+                                    </div>
+                                    <div class="mini-stat-badge">
+                                        <span class="label">Năm 2024</span>
+                                        <span class="val">${school.y2024 || (parseFloat(scoreShow) - 0.4).toFixed(1)}</span>
+                                    </div>
+                                    <div class="mini-stat-badge">
+                                        <span class="label">Năm 2025</span>
+                                        <span class="val">${school.y2025 || parseFloat(scoreShow).toFixed(1)}</span>
+                                    </div>
+                                </div>
+                                <p style="margin-top:12px;">Đánh giá xu hướng điểm chuẩn đang có xu hướng <strong>tăng ổn định</strong> theo độ hot của ngành xét tuyển trong 3 năm qua.</p>
+                            </div>
+                            <div class="analysis-block">
+                                <h5><i data-lucide="sparkles"></i> Phân tích độ phù hợp từ AI</h5>
+                                <p><strong>Lý do chọn lựa:</strong> ${school.why}</p>
+                                <p style="margin-top: 8px;"><strong>Môi trường & Hoạt động:</strong> ${school.campus}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function toggleCardAccordion(button) {
+            const card = button.parentElement;
+            const isOpen = card.classList.contains("open");
+            
+            // Đóng tất cả các card khác cùng cấp
+            card.parentElement.querySelectorAll(".university-card").forEach(c => {
+                c.classList.remove("open");
+            });
+
+            if (!isOpen) {
+                card.classList.add("open");
+            }
+        }
+
+        function restartUniGuide() {
+            switchTab('quiz');
+        }
+
+        // --- 6. BẢNG ĐIỀU KHIỂN GIÁO VIÊN NÂNG CAO (LOGIC) ---
+        function unlockTeacherPortal() {
+            const pass = document.getElementById("teacherPassword").value;
+            const errorMsg = document.getElementById("lockErrorMsg");
+            
+            const isOnline = window.location.protocol.startsWith('http');
+
+            if (isOnline) {
+                fetch('/api/get_history', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pass })
+                })
+                .then(res => {
+                    if (res.status === 401) {
+                        throw new Error("Mật khẩu Cổng Giáo Viên không chính xác!");
+                    }
+                    if (!res.ok) {
+                        throw new Error("Không thể kết nối tới máy chủ Flask!");
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        errorMsg.style.display = "none";
+                        document.getElementById("teacherLockScreen").style.display = "none";
+                        document.getElementById("teacherPortalContent").style.display = "block";
+                        
+                        mockStudents = data.history;
+                        renderStudentTable(mockStudents);
+                        
+                        setTimeout(() => {
+                            animateDashboardCharts();
+                        }, 100);
+                    }
+                })
+                .catch(err => {
+                    errorMsg.textContent = `⚠️ ${err.message}`;
+                    errorMsg.style.display = "block";
+                    document.getElementById("teacherPassword").value = "";
+                });
+            } else {
+                if (pass === "admin123") {
+                    errorMsg.style.display = "none";
+                    document.getElementById("teacherLockScreen").style.display = "none";
+                    document.getElementById("teacherPortalContent").style.display = "block";
+                    
+                    renderStudentTable(mockStudents);
+                    
+                    setTimeout(() => {
+                        animateDashboardCharts();
+                    }, 100);
+                } else {
+                    errorMsg.textContent = "⚠️ Mật khẩu chưa chính xác (Chế độ offline)!";
+                    errorMsg.style.display = "block";
+                    document.getElementById("teacherPassword").value = "";
+                }
+            }
+        }
+
+        function lockTeacherPortal() {
+            document.getElementById("teacherPassword").value = "";
+            document.getElementById("teacherLockScreen").style.display = "block";
+            document.getElementById("teacherPortalContent").style.display = "none";
+        }
+
+        function animateDashboardCharts() {
+            // Biểu đồ cột phân bố Holland
+            document.getElementById("barFillR").style.height = "25%";
+            document.getElementById("barFillI").style.height = "75%";
+            document.getElementById("barFillA").style.height = "45%";
+            document.getElementById("barFillS").style.height = "38%";
+            document.getElementById("barFillE").style.height = "40%";
+            document.getElementById("barFillC").style.height = "18%";
+
+            // Biểu đồ ngang ngành hot
+            document.getElementById("popBarIT").style.width = "85%";
+            document.getElementById("popBarBiz").style.width = "68%";
+            document.getElementById("popBarArt").style.width = "40%";
+        }
+
+        function renderStudentTable(data) {
+            const tbody = document.getElementById("studentTableBody");
+            tbody.innerHTML = "";
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-tertiary);">Không tìm thấy học sinh nào khớp điều kiện lọc.</td></tr>`;
+                return;
+            }
+
+            data.forEach(hs => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td style="font-size: 0.8rem; white-space: nowrap;">${hs.date}</td>
+                    <td style="font-weight: 700; color: var(--text-primary);">${hs.name}</td>
+                    <td style="font-weight: 800; color: var(--primary); text-align: center;">${hs.score}đ</td>
+                    <td style="text-align: center; font-weight: 600;">${hs.block}</td>
+                    <td>${hs.industry}</td>
+                    <td style="text-align: center;"><span class="badge-holland ${hs.holland}">${hs.holland}</span></td>
+                    <td style="font-size: 0.85rem; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${hs.passion}">${hs.passion}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            document.getElementById("kpiTotalStudents").textContent = data.length;
+        }
+
+        function filterTableData() {
+            const query = document.getElementById("tableSearchInput").value.toLowerCase().trim();
+            const hollandFilter = document.getElementById("filterHolland").value;
+
+            const filtered = mockStudents.filter(hs => {
+                const matchQuery = hs.name.toLowerCase().includes(query) || 
+                                   hs.block.toLowerCase().includes(query) || 
+                                   hs.industry.toLowerCase().includes(query);
+                
+                const matchHolland = hollandFilter === "" ? true : hs.holland === hollandFilter;
+                
+                return matchQuery && matchHolland;
+            });
+
+            renderStudentTable(filtered);
+        }
+
+        // Tạo và tải báo cáo định hướng thực tế của học sinh (Tải file CSV thực sự)
+        function exportCSVReport() {
+            // Định nghĩa tiêu đề cột tiếng Việt chuẩn Excel
+            let csvContent = "\uFEFF"; // Thêm BOM để hiển thị đúng dấu tiếng Việt trong Excel
+            csvContent += "ID,Thời Gian,Họ và Tên,Điểm Xét Tuyển,Khối Thi,Ngành Hướng Nghiệp,Holland,Sở Thích và Đam Mê\n";
+
+            mockStudents.forEach(hs => {
+                const row = [
+                    hs.id,
+                    `"${hs.date}"`,
+                    `"${hs.name}"`,
+                    hs.score,
+                    `"${hs.block}"`,
+                    `"${hs.industry}"`,
+                    `"${hs.holland}"`,
+                    `"${hs.passion.replace(/"/g, '""')}"`
+                ].join(",");
+                csvContent += row + "\n";
+            });
+
+            // Khởi tạo link download ẩn
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Bao_cao_huong_nghiep_hoc_sinh_${new Date().toISOString().substring(0,10)}.csv`);
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

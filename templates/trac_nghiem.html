@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trắc nghiệm Holland</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <h2 class="text-center mb-4">Khám phá bản thân (Holland)</h2>
+        <form method="POST" class="card p-4 shadow">
+            <div class="mb-3"><input type="checkbox" name="cau_R" value="1"> Bạn thích máy móc, kỹ thuật?</div>
+            <div class="mb-3"><input type="checkbox" name="cau_I" value="1"> Bạn thích nghiên cứu, phân tích?</div>
+            <div class="mb-3"><input type="checkbox" name="cau_A" value="1"> Bạn thích sáng tạo, nghệ thuật?</div>
+            <div class="mb-3"><input type="checkbox" name="cau_S" value="1"> Bạn thích giúp đỡ mọi người?</div>
+            <div class="mb-3"><input type="checkbox" name="cau_E" value="1"> Bạn thích lãnh đạo, kinh doanh?</div>
+            <div class="mb-3"><input type="checkbox" name="cau_C" value="1"> Bạn thích sắp xếp, con số?</div>
+            <button type="submit" class="btn btn-success w-100">Xem Gợi Ý Ngành</button>
+        </form>
+
+        {% if nhom %}
+            <div class="mt-5">
+                <h3>Kết quả: Bạn thuộc nhóm {{ nhom }}</h3>
+                <div class="row">
+                    {% for item in ket_qua %}
+                        <div class="col-md-4 mb-2"><div class="card p-2">{{ item.nganh }} ({{ item.truong }})</div></div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
