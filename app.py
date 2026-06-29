@@ -11,7 +11,8 @@ from groq import Groq
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Khởi tạo Flask Application
-app = Flask(__name__, static_folder=BASE_DIR, static_url_path='')
+app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 3600
 
 # --- 1. CẤU HÌNH API GROQ CHUYÊN NGHIỆP ---
 # Lấy API Key từ Biến môi trường (Environment Variable) - Phương pháp bảo mật chuẩn cho Render/Đám mây
@@ -224,5 +225,6 @@ def api_get_history():
 
 # Chạy ứng dụng trực tiếp nếu thực thi file python này
 if __name__ == '__main__':
-    # Local port 5000 mặc định
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Render gán PORT qua biến môi trường, fallback 5000 cho local
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
